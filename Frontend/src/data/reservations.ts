@@ -1,0 +1,40 @@
+import { Reservation } from '../types';
+
+export const userReservations: Reservation[] = [
+  {
+    id: '1',
+    fieldId: '1',
+    fieldName: 'Stade Mahamasina',
+    fieldImage: 'https://images.pexels.com/photos/47730/the-ball-stadion-football-the-pitch-47730.jpeg',
+    date: '2024-05-15',
+    startTime: '14:00',
+    endTime: '16:00',
+    status: 'confirmed',
+    totalPrice: 35000,
+    createdAt: '2024-05-10',
+  },
+  {
+    id: '2',
+    fieldId: '3',
+    fieldName: 'Complexe Sportif Andoharanofotsy',
+    fieldImage: 'https://images.pexels.com/photos/46798/the-ball-stadion-football-the-pitch-46798.jpeg',
+    date: '2024-05-22',
+    startTime: '18:00',
+    endTime: '20:00',
+    status: 'confirmed',
+    totalPrice: 30000,
+    createdAt: '2024-05-17',
+  },
+  {
+    id: '3',
+    fieldId: '2',
+    fieldName: 'Terrain Ambatobe',
+    fieldImage: 'https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg',
+    date: '2024-06-05',
+    startTime: '10:00',
+    endTime: '12:00',
+    status: 'pending',
+    totalPrice: 25000,
+    createdAt: '2024-05-30',
+  },
+];
