@@ -258,6 +258,10 @@ const FieldDetailPage: React.FC = () => {
                 <Shield className="w-4 h-4 mt-0.5 mr-2 text-primary-600" />
                 <span>Réservation sécurisée</span>
               </div>
+              <div className="flex items-start mb-2">
+                <Coins className="w-4 h-4 mt-0.5 mr-2 text-primary-600" />
+                <span>Paiement sur place (sans compte)</span>
+              </div>
               <div className="flex items-start">
                 <Coins className="w-4 h-4 mt-0.5 mr-2 text-primary-600" />
                 <span>Annulation gratuite jusqu'à 24h avant</span>
