@@ -11,6 +11,10 @@ export interface Field {
   coordinates: [number, number];
   amenities: string[];
   availability: AvailabilitySlot[];
+  ownerId: string;
+  ownerName: string;
+  isApproved: boolean;
+  createdAt: string;
 }
 
 export interface AvailabilitySlot {
