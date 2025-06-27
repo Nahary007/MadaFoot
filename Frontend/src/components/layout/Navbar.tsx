@@ -128,19 +128,44 @@ const Navbar: React.FC = () => {
               </Link>
               {authState.isAuthenticated ? (
                 <>
-                  <Link
-                    to="/dashboard"
-                    className="text-black hover:text-primary-600 font-medium transition-colors py-2"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Mes réservations
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="btn-secondary text-left"
-                  >
-                    Déconnexion
-                  </button>
+                  {authState.user?.role === "admin" && (
+                    <Link
+                      to="/admin/dashboard"
+                      className="text-black hover:text-primary-600 font-medium transition-colors py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Administration
+                    </Link>
+                  )}
+                  {authState.user?.role === "owner" && (
+                    <Link
+                      to="/owner/dashboard"
+                      className="text-black hover:text-primary-600 font-medium transition-colors py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Mes terrains
+                    </Link>
+                  )}
+                  {authState.user?.role === "visitor" && (
+                    <Link
+                      to="/dashboard"
+                      className="text-black hover:text-primary-600 font-medium transition-colors py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Mes réservations
+                    </Link>
+                  )}
+                  <div className="py-2 border-t">
+                    <p className="text-sm text-gray-600 mb-2">
+                      {authState.user?.name}
+                    </p>
+                    <button
+                      onClick={handleLogout}
+                      className="btn-secondary w-full text-left"
+                    >
+                      Déconnexion
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
