@@ -53,25 +53,53 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/field/:id" element={<FieldDetailPage />} />
+
+          {/* Visitor booking (no registration required) */}
+          <Route path="/visitor-booking" element={<VisitorBookingPage />} />
+
+          {/* Authentication routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* Admin routes */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <RoleProtectedRoute allowedRoles={["admin"]}>
+                <AdminDashboard />
+              </RoleProtectedRoute>
+            }
+          />
+
+          {/* Owner routes */}
+          <Route
+            path="/owner/dashboard"
+            element={
+              <RoleProtectedRoute allowedRoles={["owner"]}>
+                <OwnerDashboard />
+              </RoleProtectedRoute>
+            }
+          />
+
+          {/* Visitor/User routes */}
           <Route
             path="/booking"
             element={
-              <ProtectedRoute>
+              <RoleProtectedRoute allowedRoles={["visitor"]}>
                 <BookingPage />
-              </ProtectedRoute>
+              </RoleProtectedRoute>
             }
           />
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <RoleProtectedRoute allowedRoles={["visitor"]}>
                 <DashboardPage />
-              </ProtectedRoute>
+              </RoleProtectedRoute>
             }
           />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="*" element={<Navigate to="/\" replace />} />
+
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
 
