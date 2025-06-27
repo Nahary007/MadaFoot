@@ -25,11 +25,55 @@ export interface TimeSlot {
   available: boolean;
 }
 
+export type UserRole = "admin" | "owner" | "visitor";
+export type SubscriptionPlan = "basic" | "premium" | "pro";
+export type SubscriptionStatus = "active" | "expired" | "cancelled";
+
 export interface User {
   id: string;
   name: string;
   email: string;
   phone?: string;
+  role: UserRole;
+  subscription?: Subscription;
+  createdAt: string;
+  lastLogin?: string;
+}
+
+export interface Subscription {
+  id: string;
+  plan: SubscriptionPlan;
+  status: SubscriptionStatus;
+  startDate: string;
+  endDate: string;
+  maxFields: number;
+  currentFields: number;
+  price: number;
+}
+
+export interface FieldOwner {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  subscription: Subscription;
+  fields: Field[];
+  totalReservations: number;
+  monthlyRevenue: number;
+}
+
+export interface VisitorBooking {
+  id: string;
+  fieldId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  totalPrice: number;
+  status: "confirmed" | "pending" | "cancelled";
+  createdAt: string;
 }
 
 export interface Reservation {
@@ -40,9 +84,22 @@ export interface Reservation {
   date: string;
   startTime: string;
   endTime: string;
-  status: 'confirmed' | 'pending' | 'cancelled';
+  status: "confirmed" | "pending" | "cancelled";
   totalPrice: number;
   createdAt: string;
+  userId?: string; // Optional for visitor bookings
+  customerInfo?: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+}
+
+export interface MonthlyStats {
+  month: string;
+  reservations: number;
+  revenue: number;
+  occupancyRate: number;
 }
 
 export interface AuthState {
