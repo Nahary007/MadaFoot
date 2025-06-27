@@ -1,10 +1,25 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, AuthState } from '../types';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { User, AuthState, UserRole, VisitorBooking } from "../types";
 
 interface AuthContextProps {
   authState: AuthState;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, role?: UserRole) => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    phone: string,
+    role: UserRole,
+  ) => Promise<void>;
+  createVisitorBooking: (
+    bookingData: Omit<VisitorBooking, "id" | "createdAt">,
+  ) => Promise<string>;
   logout: () => void;
 }
 
@@ -22,8 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Check if user is stored in localStorage
-    const storedUser = localStorage.getItem('madafoot_user');
-    
+    const storedUser = localStorage.getItem("madafoot_user");
+
     if (storedUser) {
       try {
         const user = JSON.parse(storedUser);
@@ -34,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           error: null,
         });
       } catch (error) {
-        localStorage.removeItem('madafoot_user');
+        localStorage.removeItem("madafoot_user");
         setAuthState({
           ...initialState,
           loading: false,
@@ -57,22 +72,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       // Mock API call - would be replaced with actual API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock validation
-      if (email !== 'user@example.com' || password !== 'password123') {
-        throw new Error('Email ou mot de passe incorrect');
+      if (email !== "user@example.com" || password !== "password123") {
+        throw new Error("Email ou mot de passe incorrect");
       }
 
       const user: User = {
-        id: '1',
-        name: 'John Doe',
-        email: 'user@example.com',
-        phone: '+261 34 567 89',
+        id: "1",
+        name: "John Doe",
+        email: "user@example.com",
+        phone: "+261 34 567 89",
       };
 
       // Store user in localStorage
-      localStorage.setItem('madafoot_user', JSON.stringify(user));
+      localStorage.setItem("madafoot_user", JSON.stringify(user));
 
       setAuthState({
         user,
@@ -84,12 +99,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setAuthState({
         ...authState,
         loading: false,
-        error: error instanceof Error ? error.message : 'Une erreur est survenue',
+        error:
+          error instanceof Error ? error.message : "Une erreur est survenue",
       });
     }
   };
 
-  const register = async (name: string, email: string, password: string): Promise<void> => {
+  const register = async (
+    name: string,
+    email: string,
+    password: string,
+  ): Promise<void> => {
     setAuthState({
       ...authState,
       loading: true,
@@ -98,7 +118,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       // Mock API call - would be replaced with actual API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const user: User = {
         id: Date.now().toString(),
@@ -107,7 +127,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
 
       // Store user in localStorage
-      localStorage.setItem('madafoot_user', JSON.stringify(user));
+      localStorage.setItem("madafoot_user", JSON.stringify(user));
 
       setAuthState({
         user,
@@ -119,13 +139,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setAuthState({
         ...authState,
         loading: false,
-        error: error instanceof Error ? error.message : 'Une erreur est survenue',
+        error:
+          error instanceof Error ? error.message : "Une erreur est survenue",
       });
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('madafoot_user');
+    localStorage.removeItem("madafoot_user");
     setAuthState({
       user: null,
       isAuthenticated: false,
@@ -144,7 +165,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = (): AuthContextProps => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
