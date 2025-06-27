@@ -150,6 +150,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     name: string,
     email: string,
     password: string,
+    phone: string,
+    role: UserRole,
   ): Promise<void> => {
     setAuthState({
       ...authState,
@@ -165,7 +167,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         id: Date.now().toString(),
         name,
         email,
+        phone,
+        role,
+        createdAt: new Date().toISOString(),
+        lastLogin: new Date().toISOString(),
       };
+
+      // For owner accounts, add default basic subscription
+      if (role === "owner") {
+        user.subscription = {
+          id: `sub-${Date.now()}`,
+          plan: "basic",
+          status: "active",
+          startDate: new Date().toISOString(),
+          endDate: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+          maxFields: 2,
+          currentFields: 0,
+          price: 50000,
+        };
+      }
 
       // Store user in localStorage
       localStorage.setItem("madafoot_user", JSON.stringify(user));
@@ -183,6 +205,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         error:
           error instanceof Error ? error.message : "Une erreur est survenue",
       });
+    }
+  };
+
+  const createVisitorBooking = async (
+    bookingData: Omit<VisitorBooking, "id" | "createdAt">,
+  ): Promise<string> => {
+    try {
+      // Mock API call for visitor booking
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const booking: VisitorBooking = {
+        ...bookingData,
+        id: `booking-${Date.now()}`,
+        createdAt: new Date().toISOString(),
+      };
+
+      // Store booking temporarily (in real app, this would be sent to backend)
+      const existingBookings = JSON.parse(
+        localStorage.getItem("visitor_bookings") || "[]",
+      );
+      existingBookings.push(booking);
+      localStorage.setItem(
+        "visitor_bookings",
+        JSON.stringify(existingBookings),
+      );
+
+      return booking.id;
+    } catch (error) {
+      throw new Error("Erreur lors de la création de la réservation");
     }
   };
 
