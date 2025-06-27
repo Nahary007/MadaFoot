@@ -63,7 +63,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const login = async (email: string, password: string): Promise<void> => {
+  const login = async (
+    email: string,
+    password: string,
+    role?: UserRole,
+  ): Promise<void> => {
     setAuthState({
       ...authState,
       loading: true,
@@ -74,17 +78,54 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Mock API call - would be replaced with actual API
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Mock validation
-      if (email !== "user@example.com" || password !== "password123") {
-        throw new Error("Email ou mot de passe incorrect");
+      // Mock validation with different test accounts
+      let user: User | null = null;
+
+      if (email === "admin@madafoot.com" && password === "admin123") {
+        user = {
+          id: "admin-1",
+          name: "Administrateur",
+          email: "admin@madafoot.com",
+          phone: "+261 34 000 00 00",
+          role: "admin",
+          createdAt: "2024-01-01",
+          lastLogin: new Date().toISOString(),
+        };
+      } else if (email === "owner@example.com" && password === "owner123") {
+        user = {
+          id: "owner-1",
+          name: "Propriétaire Test",
+          email: "owner@example.com",
+          phone: "+261 34 111 11 11",
+          role: "owner",
+          subscription: {
+            id: "sub-1",
+            plan: "premium",
+            status: "active",
+            startDate: "2024-01-01",
+            endDate: "2024-12-31",
+            maxFields: 5,
+            currentFields: 2,
+            price: 120000,
+          },
+          createdAt: "2024-01-15",
+          lastLogin: new Date().toISOString(),
+        };
+      } else if (email === "user@example.com" && password === "password123") {
+        user = {
+          id: "visitor-1",
+          name: "Visiteur Test",
+          email: "user@example.com",
+          phone: "+261 34 567 89",
+          role: "visitor",
+          createdAt: "2024-02-01",
+          lastLogin: new Date().toISOString(),
+        };
       }
 
-      const user: User = {
-        id: "1",
-        name: "John Doe",
-        email: "user@example.com",
-        phone: "+261 34 567 89",
-      };
+      if (!user) {
+        throw new Error("Email ou mot de passe incorrect");
+      }
 
       // Store user in localStorage
       localStorage.setItem("madafoot_user", JSON.stringify(user));
